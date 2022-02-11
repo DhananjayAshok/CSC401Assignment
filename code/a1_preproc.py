@@ -90,7 +90,7 @@ def main(args):
 
             data = json.load(open(fullFile))[:args.max]
             possible_keys = ['author_flair_text', 'parent_id', 'author_flair_css_class', 'link_id', 'ups', 'id', 'score_hidden', 'author', 'gilded', 'controversiality', 'name', 'downs', 'archived', 'created_utc', 'score', 'distinguished', 'subreddit_id', 'retrieved_on', 'body', 'subreddit', 'edited']
-            useless_keys = possible_keys#['parent_id', 'author_flair_css_class', 'link_id', 'id',  'subreddit_id']
+            useless_keys = ['parent_id', 'author_flair_css_class', 'link_id',  'subreddit_id']
             for i, line in enumerate(data):
                 j = json.loads(line)
                 keys = list(j.keys())
