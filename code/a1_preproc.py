@@ -68,9 +68,9 @@ def preproc1(comment , steps=range(1, 6)):
         totalComm = ""
         for i, sent in enumerate(utt.sents):
             if i != 0:
-                totalComm += "\n "
+                totalComm += " \n "
             for j, token in enumerate(sent):
-                print(f"\tLooking at sentence {i} token {j}: {token.text} has lemma {token.lemma_} and tag {token.tag_}")
+                #  print(f"\tLooking at sentence {i} token {j}: {token.text} has lemma {token.lemma_} and tag {token.tag_}")
                 if token.text in [" ", "\t", "\n", "\r", "\f", "\v"]:  # If the token is whitespace ignore but don't add
                     continue
                 if j != 0:
