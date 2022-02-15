@@ -54,6 +54,13 @@ def safe_std(array):
         return array.std()
 
 
+def safe_divide(a, b):
+    if b != 0:
+        return a/b
+    else:
+        return 0
+
+
 def extract1(comment):
     ''' This function extracts features from a single comment
 
@@ -87,16 +94,20 @@ def extract1(comment):
     n_tokens = 0
     total_token_length = 0
     total_sentence_length = 0
+    going, going_to = False, False
     aoa, img, fam, vmean, amean, dmean = [], [], [], [], [], []
     sentences = comment.split(" \n ")
     n_sentences = len(sentences)
     for sentence in sentences:
         token_tags = sentence.split(" ")
         total_sentence_length += len(token_tags)
-        for token_tag in token_tags:
-            if "/" not in token_tag:
-                #warnings.warn(f"warning, {token_tag} does not have / and is not an endline, should not be happening")
-                print("5")   # TODO: I think this is being called, find out why
+        for i, token_tag in enumerate(token_tags):
+            if token_tag in ["", " "]:
+                continue
+            elif "/" not in token_tag:
+                #print(f"warning: {token_tag}: {i}th element of sentence \n\t{token_tags} from comment \n\t{sentences} "
+                #      f"does not have / and is not an endline")
+                #print(f"==\'\': {token_tag==''}, ==\' \': {token_tag==' '}")
                 pass
             else:
                 split = token_tag.split("/")
@@ -116,15 +127,31 @@ def extract1(comment):
                     n_coord_conj += 1
                 elif tag == "VBD":
                     n_pt_verbs += 1
-                elif tag == "TO DO":  # TODO: I don't get how to find future-test
-                    n_ft_verbs += 1
                 if token == ",":
                     n_commas += 1
-                elif token == "TO DO":  # TODO: I don't get how to find the multi-character tokens
-                    n_multi_punc += 1
-                if tag == "NN":
+                elif token in ["will", "gonna"] or "\'ll" in token or (going_to and tag == "VB") :
+                    n_ft_verbs += 1
+                elif len(token) > 1:
+                    flag = True
+                    for character in token:
+                        if character not in string.punctuation:
+                            flag = False
+                            break
+                    if flag:
+                        n_multi_punc += 1
+                if token == "going":
+                    going = True
+                else:
+                    if going:
+                        if token == "to":
+                            going_to = True
+                        else:
+                            going_to = False
+                        going = False
+
+                if tag in ["NN", "NNS"]:
                     n_c_noun += 1
-                elif tag == "NR":
+                elif tag in ["NNP", "NNPS"]:
                     n_p_noun += 1
                 elif tag == "AD":
                     n_adv += 1
@@ -145,8 +172,8 @@ def extract1(comment):
                     safe_cast_append(vmean, r_list[0])
                     safe_cast_append(amean, r_list[1])
                     safe_cast_append(dmean, r_list[2])
-    avg_l_sent = total_sentence_length/n_sentences
-    avg_len_token = total_token_length/n_tokens
+    avg_l_sent = safe_divide(total_sentence_length, n_sentences)
+    avg_len_token = safe_divide(total_token_length, n_tokens)
     feats[0] = n_t_upper
     feats[1] = n_fp_pronouns
     feats[2] = n_sp_prononuns
@@ -254,6 +281,9 @@ def main(args):
     feats = np.zeros((len(data), 173+1))
     for i, comment in enumerate(data):
         feats[i, -1] = cat_dict.get(comment["cat"], None)
+        c = comment["body"]
+        if c in ["", " ", "\n", " \n "]:
+            print("Here ", i, " ", c)
         small_feats = extract1(comment["body"])
         feats[i, :-1] = extract2(small_feats, comment["cat"], comment["id"])
 

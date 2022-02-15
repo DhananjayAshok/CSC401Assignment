@@ -47,8 +47,8 @@ def preproc1(comment , steps=range(1, 6)):
     '''
     modComm = comment
     if 1 in steps:  
-        #modify this to handle other whitespace chars.
-        #replace newlines with spaces
+        # modify this to handle other whitespace chars.
+        # replace newlines with spaces
         nonwhitespaces = ["\n", "\t", "\r", "\f", "\v"]
         for item in nonwhitespaces:
             modComm = re.sub(item, " ", modComm)
@@ -59,7 +59,7 @@ def preproc1(comment , steps=range(1, 6)):
     if 3 in steps:  # remove URLs
         modComm = re.sub(r"\b(http:\/\/|https:\/\/|www\.)\S+", "", modComm)
         
-    if 4 in steps: #remove duplicate spaces.
+    if 4 in steps:  # remove duplicate spaces.
         modComm = re.sub(' +', ' ', modComm)
 
     if 5 in steps:
@@ -70,7 +70,8 @@ def preproc1(comment , steps=range(1, 6)):
             if i != 0:
                 totalComm += " \n "
             for j, token in enumerate(sent):
-                #  print(f"\tLooking at sentence {i} token {j}: {token.text} has lemma {token.lemma_} and tag {token.tag_}")
+                #  print(f"\tLooking at sentence {i} token {j}: {token.text}
+                #  has lemma {token.lemma_} and tag {token.tag_}")
                 if token.text in [" ", "\t", "\n", "\r", "\f", "\v"]:  # If the token is whitespace ignore but don't add
                     continue
                 if j != 0:
@@ -89,8 +90,12 @@ def main(args):
             print( "Processing " + fullFile)
 
             data = json.load(open(fullFile))[:args.max]
-            possible_keys = ['author_flair_text', 'parent_id', 'author_flair_css_class', 'link_id', 'ups', 'id', 'score_hidden', 'author', 'gilded', 'controversiality', 'name', 'downs', 'archived', 'created_utc', 'score', 'distinguished', 'subreddit_id', 'retrieved_on', 'body', 'subreddit', 'edited']
-            useless_keys = ['parent_id', 'author_flair_css_class', 'link_id',  'subreddit_id']
+            possible_keys = ['author_flair_text', 'parent_id', 'author_flair_css_class', 'link_id', 'ups', 'id',
+                             'score_hidden', 'author', 'gilded', 'controversiality', 'name', 'downs', 'archived',
+                             'created_utc', 'score', 'distinguished', 'subreddit_id', 'retrieved_on', 'body',
+                             'subreddit', 'edited']
+            useless_keys = ['parent_id', 'author_flair_css_class', 'link_id',  'subreddit_id', 'author_flair_text',
+                            'gilded', 'archived', 'distinguished', 'retrieved_on', 'edited']
             for i, line in enumerate(data):
                 j = json.loads(line)
                 keys = list(j.keys())
@@ -98,8 +103,13 @@ def main(args):
                     if key in keys and key != "body":
                         j.pop(key)
                 j["cat"] = file
-                j["body"] = preproc1(j["body"])
-                allOutput.append(j)
+                processed_body = preproc1(j["body"])
+                if processed_body == "":
+                    # print(f"{j['body']} is empty when processed")
+                    pass
+                else:
+                    j["body"] = processed_body
+                    allOutput.append(j)
     print(f"allOutput length: {len(allOutput)}")
     fout = open(args.output, 'w')
     fout.write(json.dumps(allOutput))
@@ -107,17 +117,18 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process each .')
+    parser = argparse.ArgumentParser(description='Process each.')
     parser.add_argument('ID', metavar='N', type=int, nargs=1,
                         help='your student ID', default=1004842977)
     parser.add_argument("-o", "--output", help="Directs the output to a filename of your choice", required=True)
     parser.add_argument("--max", type=int, help="The maximum number of comments to read from each file", default=10000)
-    parser.add_argument("--a1_dir", help="The directory for A1. Should contain subdir data. Defaults to the directory for A1 on cdf.", default='/u/cs401/A1')
+    parser.add_argument("--a1_dir", help="The directory for A1. Should contain subdir data. "
+                                         "Defaults to the directory for A1 on cdf.", default='/u/cs401/A1')
     
     args = parser.parse_args()
 
-    if (args.max > 200272):
-        print( "Error: If you want to read more than 200,272 comments per file, you have to read them all." )
+    if args.max > 200272:
+        print("Error: If you want to read more than 200,272 comments per file, you have to read them all.")
         sys.exit(1)
     
     indir = os.path.join(args.a1_dir, 'data')
