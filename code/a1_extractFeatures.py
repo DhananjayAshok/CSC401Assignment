@@ -123,7 +123,7 @@ def extract1(comment):
                     n_sp_prononuns += 1
                 if lower in THIRD_PERSON_PRONOUNS:
                     n_tp_pronouns += 1
-                if tag == "CCONJ":
+                if tag in ["CCONJ", "CC"]:
                     n_coord_conj += 1
                 elif tag == "VBD":
                     n_pt_verbs += 1
@@ -153,7 +153,7 @@ def extract1(comment):
                     n_c_noun += 1
                 elif tag in ["NNP", "NNPS"]:
                     n_p_noun += 1
-                elif tag == "AD":
+                elif tag in ["RB", "RBR", "RBS"]:
                     n_adv += 1
                 elif tag in ["WDT", "WP", "WP$", "WRB"]:
                     n_wh_word += 1

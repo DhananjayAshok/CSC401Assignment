@@ -169,9 +169,9 @@ def class33(output_dir, X_train, X_test, y_train, y_test, i, X_1k, y_1k):
     feature_intersection = []
     indices = np.where(top5[1])[0]
     print(indices)
-    if indices in top_5:
-        feature_intersection.append(indices)
-
+    for i in indices:
+        if i in top_5:
+            feature_intersection.append(i)
     with open(f"{output_dir}/a1_3.3.txt", "w") as outf:
         # Prepare the variables with corresponding names, then uncomment
         # this, so it writes them to outf.
