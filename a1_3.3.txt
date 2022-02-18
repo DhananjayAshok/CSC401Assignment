@@ -1,0 +1,35 @@
+5 p-values: ['0.0', '0.0', '0.0', '0.0', '0.0']
+50 p-values: ['0.0', '1.6171024786913658e-249', '4.01e-321', '1.1408416184775123e-297', '4.480783733502739e-256', '0.0', '2.4491064517902377e-247', '6.557153546043076e-270', '3.996007703855631e-277', '0.0', '3.739156744143857e-277', '0.0', '0.0', '9.610441541726096e-298', '1.8161490827029594e-302', '0.0', '3.21349e-318', '0.0', '0.0', '8.978062147609345e-239', '9.266816e-317', '0.0', '0.0', '0.0', '0.0', '0.0', '8.143971403652253e-297', '0.0', '3.1092114648567755e-305', '0.0', '0.0', '2.4e-322', '0.0', '0.0', '2e-323', '0.0', '7.561878804898745e-294', '0.0', '1.3015082310279512e-239', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '1.19926713e-316', '1.1655185352572887e-271', '0.0', '0.0']
+Accuracy for 1k: 0.3320
+Accuracy for full dataset: 0.3529
+Chosen feature intersection: [1, 142, 163]
+Top-5 at higher: [  1  74 128 142 163]
+
+Question Answers: parts a and c refer to Table 1
+a) Chosen Feature Intersection Names: [First Person Pronouns, receptiviti_genuine , receptiviti_self_assured]
+	As shown in table 1, it seems that Left leaning comments, on average, refer to themeselves or speak about themeselves twice as often (hence a higher first person pronoun usage). This might make it a statistically useful feature to help separate the data, and might be reflective of how Left or progressive ideology emphasizes lived experience and personal knowledge as more important in conversations that other political leanings. 
+	The receptiviti scores of self assurance and genuine are also higher on average for Left leaning comments. While this could be a result of biased heuristics and determination of human emotions like self assurance, it implies that average commenter from the left is both more genuine and self assured than other communities. 
+
+	These are potentially vital in separating political communities, the language used by different political ideologies may vary in terms of the extent to which they employ compassion and personal strife, which would lead to a higher number of first person pronouns and genuine score. At the same time, the rigidity and the extent to which members of an ideology believe in their own opinions might be an important differentiating factor that is expressed in the self assured feature. 
+
+b) p values are lower as the amount of data used increases. This is perhaps because the 95% confidence intervals given by mean +- 1.96 std become more refined as more data is recorded. This happens as n approaches infinity the sample mean and variance grow closer to the true values. This allows the selection algorithm to be more confident of its rejection of the null hypothesis. 
+
+	
+c) Top-5 at higher Names: [First Person Pronouns, liwc_home, receptiviti_conscientiousness, receptiviti_genuine , receptiviti_self_assured]
+	Other than the three in the intersection whose value is stated in part a, home and conscientiousness are features which seem to help separate the categories better. 
+	Conscientiousness measures the extent to which a person seems responsible, organized and reliable. A higher conscientiousness score for the Left and Right when compared to the other ideologies is indicative that these communities attempt to be (or at least project) more systematic and organized when compared to others. 
+	Home is a measure of the extent to which a comment refers to home or household concepts like apartment, family, kitchen etc. This seems odd as a separating factor, but might be a sign that left leaning groups discuss more issues that take place in a household setting or pertain to family disputes and issues when compared to other ideologies. 
+
+
+Table 1: Means of top-5 features at higher by Label
+        First Person Pronouns      Home  Conscientiousness   Genuine  Self Assured
+Label                                                                             
+Alt                  1.157933  0.023352           1.936449  1.692219      1.241347
+Center               1.066316  0.022165           1.550651  1.726167      1.217746
+Left                 2.929915  0.050008           3.415299  3.024267      2.123959
+Right                1.652594  0.025155           2.286397  2.250136      1.369159
+
+
+
+	
+
